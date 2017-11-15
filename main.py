@@ -11,8 +11,6 @@ MAZE = [[]]
 #Startkoordinaten
 x = 0
 y = 0
-tpx = 0
-tpy = 0
 tp1 = []
 tp2 = []
 #Labyrinth einlesen
@@ -45,7 +43,7 @@ def printstate():
 
 def setmarker(var_x, var_y):
     """
-    Setzt eine Markierung auf der aktuellen Position
+    Setzt eine Markierung "o" auf der aktuellen Position
     """
     MAZE[var_x][var_y] = 'o'
 
@@ -73,7 +71,7 @@ def portal(x, y, tp):
     andere Portal zurueck
     """
     var_portalend = []
-    print ("X", x, y)
+    print("X", x, y)
     if tp[0] == x and tp[1] == y:
         var_portalend.append(tp[2])
         var_portalend.append(tp[3])
@@ -155,7 +153,9 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
                 var_c = copy.deepcopy(stack[0])
                 var_c.append([x, y-1])
                 stack.append(var_c)
-            if MAZE[stack[0][-1][0]][stack[0][-1][1]] == '1':
+            if MAZE[1][9] == '1':
+                print(stack, stack[0][-1][1])
+                break
                 portalend = portal(stack[0][-1][0], stack[0][-1][1], var_tp1)
                 var_c = copy.deepcopy(stack[0])
                 var_c.append([portalend[0], portalend[1]])
@@ -228,14 +228,18 @@ def analyse(maze, char):
 
 def test(filename):
     """
-    Testklasse
+    Testklasse zum ausprobieren von Funktionen
     """
-    tp1 = []
-    tp2 = []
+    tp1 = [4]
+    tp2 = [2]
     maze = readmaze(filename)
-    tp1 = analyse(maze, "1")
-    tp2 = analyse(maze, "2")
-    print (tp1)
+    #tp1 = analyse(maze, "1")
+    #tp2 = analyse(maze, "2")
+    #print (tp1)
 
-#test("testmaze.txt")
-start("testmaze.txt", "breath")
+def testklasse():
+    tptest = []
+    return tptest, True
+
+test("testmaze.txt")
+#start("testmaze.txt", "breath")
