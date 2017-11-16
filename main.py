@@ -6,6 +6,7 @@ Robert Geislinger
 """
 import copy
 import inspect
+import time
 #Labyrinth
 MAZE = [[]]
 #Labyrinth einlesen
@@ -79,6 +80,7 @@ def dfs(var_sp, var_gp, tp1, tp2):
     stack = []
     stack.append(var_x)
     stack.append(var_y)
+    #reihenfolge = ['u', 'r', 'd', 'l']
     while True:
         if goalnotreached(var_x, var_y):
             if neighbourfree('u', var_x, var_y):
@@ -96,7 +98,6 @@ def dfs(var_sp, var_gp, tp1, tp2):
             else:
                 stack.pop()
                 stack.pop()
-            
             if MAZE[stack[-2]][stack[-1]] == '1':
                 portalend = portal(stack[-2], stack[-1], tp1)
                 stack.append(portalend[0])
@@ -105,7 +106,6 @@ def dfs(var_sp, var_gp, tp1, tp2):
                 portalend(stack[-2], stack[-1], tp2)
                 stack.append(portalend[0])
                 stack.append(portalend[1])
-            
             setmarker(var_x, var_y)
             var_y = stack[-1]
             var_x = stack[-2]
@@ -148,6 +148,7 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
                 var_c = copy.deepcopy(stack[0])
                 var_c.append([x, y-1])
                 stack.append(var_c)
+            """
             if MAZE[1][9] == '1':
                 print(stack, stack[0][-1][1])
                 break
@@ -155,7 +156,6 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
                 var_c = copy.deepcopy(stack[0])
                 var_c.append([portalend[0], portalend[1]])
                 stack.append(var_c)
-            """
             elif MAZE[stack[-2]][stack[-1]] == '2':
                 portal(stack[-2], stack[-1], var_tp2)
                 stack.append(gp[0])
@@ -172,10 +172,10 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
             print(stack[0])
             printfinalstate(var_sp, var_gp, stack)
             break
-#Anzeige des gefundenen Pfades Menschen lesbar
+
 def printfinalstate(var_sp, var_gp, stack):
     """
-    Druckt den finalen weg aus
+    Druckt den finalen Weg aus
     """
     if inspect.stack()[1][3] == "bfs":
         for i in range(0, len(stack[0])):
@@ -187,26 +187,10 @@ def printfinalstate(var_sp, var_gp, stack):
     #print(x)
     #print(y)
 
-def start(filename, search):
-    """
-    Startmethode
-    """
-    tp1 = []
-    tp2 = []
-    var_sp = []
-    maze = readmaze(filename)
-    var_sp = analyse(maze, "s")
-    var_gp = analyse(maze, "g")
-    tp1 = analyse(maze, "1")
-    tp2 = analyse(maze, "2")
-    if search == "depth":
-        dfs(var_sp, var_gp, tp1, tp2)
-    elif search == "breath":
-        bfs(var_sp, var_gp, tp1, tp2)
 
 def analyse(maze, char):
     """
-    Durchsucht das Array nach den chars und gibt eine Liste zurueck
+    Durchsucht das Array nach dem char und gibt eine Liste zurueck
     """
     i = 0
     j = 0
@@ -223,30 +207,76 @@ def analyse(maze, char):
         i += 1
     return charlist
 
-def direction(dir, x, y):
+def direction(arrow, x, y):
+    """
+    Wandelt die Richtung in ein neuen x und y Wert
+    """
     directionarray = []
-    if dir == 'u':
+    if arrow == 'u':
         x -= 1
-    elif dir == 'r':
+    elif arrow == 'r':
         y += 1
-    elif dir == 'd':
+    elif arrow == 'd':
         x += 1
-    elif dir == 'l':
+    elif arrow == 'l':
         y -= 1
     directionarray.append(x)
     directionarray.append(y)
     return directionarray
 
-def test(filename):
+def euklidischedistanz(sp, gp):
     """
-    Testklasse zum ausprobieren von Funktionen
+    Berechnet die Euklidische Distanz zwischen zwei Feldern
     """
-    tp1 = [4]
-    tp2 = [2]
-    maze = readmaze(filename)
-    #tp1 = analyse(maze, "1")
-    #tp2 = analyse(maze, "2")
-    #print (tp1)
+    return abs((sp[0]-gp[0])+(sp[1]-gp[1]))
 
-#test("testmaze.txt")
-start("testmaze.txt", "depth")
+def astar(sp, gp, tp1, tp2):
+    """
+    A* Suche
+    """
+    time.sleep(.10)
+    print(euklidischedistanz(sp, gp))
+    ###
+    x = sp[0]
+    y = sp[1]
+    stack = [[[x, y]]]
+    var_c = []
+    i = 0
+    while True:
+        if goalnotreached(x, y):
+            setmarker(x, y)
+            if neighbourfree('u', x, y):
+                arrow = direction('u', x, y)
+                var_c = copy.deepcopy(stack[0])
+                euklid = euklidischedistanz(sp, gp)
+                var_c.append([arrow[0], arrow[1]])
+                stack.append(var_c)
+            if neighbourfree('r', x, y):
+                arrow = direction('r', x, y)
+                var_c = copy.deepcopy(stack[0])
+                euklid = euklidischedistanz(sp, gp)
+                var_c.append([arrow[0], arrow[1]])
+                stack.append(var_c)
+            if neighbourfree('d', x, y):
+                arrow = direction('d', x, y)
+                var_c = copy.deepcopy(stack[0])
+                euklid = euklidischedistanz(sp, gp)
+                var_c.append([arrow[0], arrow[1]])
+                stack.append(var_c)
+            if neighbourfree('d', x, y):
+                arrow = direction('d', x, y)
+                var_c = copy.deepcopy(stack[0])
+                euklid = euklidischedistanz(sp, gp)
+                var_c.append([arrow[0], arrow[1]])
+                stack.append(var_c)
+            stack.pop(0)
+            x = stack[0][-1][0]
+            y = stack[0][-1][1]
+            printstate()
+            print(x)
+            print(y)
+            i += 1
+        else:
+            print(stack[0])
+            printfinalstate(var_sp, var_gp, stack)
+            break
