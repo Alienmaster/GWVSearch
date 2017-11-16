@@ -8,11 +8,6 @@ import copy
 import inspect
 #Labyrinth
 MAZE = [[]]
-#Startkoordinaten
-x = 0
-y = 0
-tp1 = []
-tp2 = []
 #Labyrinth einlesen
 def readmaze(filename):
     """
@@ -57,13 +52,8 @@ def neighbourfree(var_d, var_x, var_y):
     """Ueberprueft in die jeweilige Richtung ob frei ist.
     Uebergeben wird die Richtung (up, down, left right)
     und der Switchcase gibt True/False zurueck"""
-    direction = {
-        'u':('o' != MAZE[var_x-1][var_y] != 'x'),
-        'r':('o' != MAZE[var_x][var_y+1] != 'x'),
-        'd':('o' != MAZE[var_x+1][var_y] != 'x'),
-        'l':('o' != MAZE[var_x][var_y-1] != 'x')
-        }
-    return direction.get(var_d)
+    d = direction(var_d, var_x, var_y)
+    return 'o' != MAZE[d[0]][d[1]] != 'x'
 
 def portal(x, y, tp):
     """
@@ -87,8 +77,8 @@ def dfs(var_sp, var_gp, tp1, tp2):
     var_x = var_sp[0]
     var_y = var_sp[1]
     stack = []
-    stack.append(x)
-    stack.append(y)
+    stack.append(var_x)
+    stack.append(var_y)
     while True:
         if goalnotreached(var_x, var_y):
             if neighbourfree('u', var_x, var_y):
@@ -106,6 +96,7 @@ def dfs(var_sp, var_gp, tp1, tp2):
             else:
                 stack.pop()
                 stack.pop()
+            
             if MAZE[stack[-2]][stack[-1]] == '1':
                 portalend = portal(stack[-2], stack[-1], tp1)
                 stack.append(portalend[0])
@@ -114,6 +105,7 @@ def dfs(var_sp, var_gp, tp1, tp2):
                 portalend(stack[-2], stack[-1], tp2)
                 stack.append(portalend[0])
                 stack.append(portalend[1])
+            
             setmarker(var_x, var_y)
             var_y = stack[-1]
             var_x = stack[-2]
@@ -122,6 +114,9 @@ def dfs(var_sp, var_gp, tp1, tp2):
             print(var_x)
             print(var_y)
         else:
+            if len(stack) == 0:
+                print("Kein Weg zum Ziel gefunden")
+                break
             printfinalstate(var_sp, var_gp, stack)
             break
 
@@ -189,13 +184,15 @@ def printfinalstate(var_sp, var_gp, stack):
     MAZE[var_sp[0]][var_sp[1]] = 'S'
     MAZE[var_gp[0]][var_gp[1]] = 'G'
     printstate()
-    print(x)
-    print(y)
+    #print(x)
+    #print(y)
 
 def start(filename, search):
     """
     Startmethode
     """
+    tp1 = []
+    tp2 = []
     var_sp = []
     maze = readmaze(filename)
     var_sp = analyse(maze, "s")
@@ -226,6 +223,20 @@ def analyse(maze, char):
         i += 1
     return charlist
 
+def direction(dir, x, y):
+    directionarray = []
+    if dir == 'u':
+        x -= 1
+    elif dir == 'r':
+        y += 1
+    elif dir == 'd':
+        x += 1
+    elif dir == 'l':
+        y -= 1
+    directionarray.append(x)
+    directionarray.append(y)
+    return directionarray
+
 def test(filename):
     """
     Testklasse zum ausprobieren von Funktionen
@@ -237,9 +248,5 @@ def test(filename):
     #tp2 = analyse(maze, "2")
     #print (tp1)
 
-def testklasse():
-    tptest = []
-    return tptest, True
-
-test("testmaze.txt")
-#start("testmaze.txt", "breath")
+#test("testmaze.txt")
+start("testmaze.txt", "depth")
