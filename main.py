@@ -199,11 +199,3 @@ def direction(arrow, x, y):
     directionarray.append(x)
     directionarray.append(y)
     return directionarray
-
-def euklidischedistanz(sp, gp):
-    """
-    Berechnet die Euklidische Distanz zwischen zwei Feldern.
-    Übergeben werden eine Liste mit Startund Zielkoordinaten ([0] = x, [1] = y)
-    Rückgabewert ist die Euklidische Distanz als int
-    """
-    return abs((sp[0]-gp[0])+(sp[1]-gp[1]))

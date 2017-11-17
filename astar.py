@@ -10,7 +10,6 @@ def astar(sp, gp, tp1, tp2, order):
     zum Heap hinzugefügt mit der dazugehörigen Euklidischen Distanz.
     Danach wird der kleinste Wert als neue x und y erstellt.
     """
-    print(main.euklidischedistanz(sp, gp))
     ###
     x = sp[0]
     y = sp[1]
@@ -18,24 +17,27 @@ def astar(sp, gp, tp1, tp2, order):
     # stack = [[[x, y]]]
     # var_c = []
     heap = []
+    heappush(heap, (gp[0]-x+gp[1]-y,0, x, y))
     #heappush(heap, (euklid, x, y))
     while True:
         if main.goalnotreached(x, y):
             main.setmarker(x, y)
-            actualorder = copy.deepcopy(order)
-            while len(actualorder) != 0:
-                nextstep = 0
-                nextstep = actualorder.pop(0)
-                if main.neighbourfree(nextstep , x, y):
-                    arrow = main.direction(nextstep, x, y)
-                    euklid = main.euklidischedistanz(arrow, gp)
-                    print(euklid)
-                    heappush(heap, (euklid, arrow[0], arrow[1]))
-            # print(heappop(heap))
-            nextmove = (heappop(heap))
-            x = nextmove[1]
-            y = nextmove[2]
-            print(nextmove[2])
+            if(main.neighbourfree('u', x, y)):
+                euklid = gp[0] - (x-1) + (gp[1] - y)
+                heappush(heap, (heap[0][1]+euklid,heap[0][1]+1, x-1, y))
+            if(main.neighbourfree('r', x, y)):
+                euklid = gp[0] - x + (gp[1] - (y+1))
+                heappush(heap, (heap[0][1]+euklid,heap[0][1]+1, x, y+1))
+            if(main.neighbourfree('d', x, y)):
+                euklid = gp[0] - (x+1) + (gp[1] - y)
+                heappush(heap, (heap[0][1]+euklid,heap[0][1]+1, x+1, y))
+            if(main.neighbourfree('l', x, y)):
+                euklid = gp[0] - x + (gp[1] - (y-1))
+                heappush(heap, (heap[0][1]+euklid,heap[0][1]+1, x, y-1))
+            x = heap[0][2]
+            y = heap[0][3]
+            heappop(heap)
+            print(heap)
             output.printstate()
             time.sleep(.10)
         else:
