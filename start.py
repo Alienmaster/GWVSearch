@@ -3,7 +3,7 @@ Startdatei
 """
 import main
 import astar
-
+reihenfolge = ['u', 'r', 'd', 'l']
 def start(filename, search):
     """
     Startmethode
@@ -21,6 +21,6 @@ def start(filename, search):
     elif search == "breath":
         main.bfs(var_sp, var_gp, tp1, tp2)
     elif search == "astar":
-        astar.astar(var_sp, var_gp, tp1, tp2)
+        astar.astar(var_sp, var_gp, tp1, tp2, reihenfolge)
 
 start("testmaze.txt", "astar")
