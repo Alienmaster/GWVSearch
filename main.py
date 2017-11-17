@@ -5,8 +5,8 @@ Florian Schmalzl
 Robert Geislinger
 """
 import copy
-import inspect
 import time
+import output
 #Labyrinth
 MAZE = [[]]
 #Labyrinth einlesen
@@ -26,16 +26,6 @@ def readmaze(filename):
             var_m += 1
         MAZE.pop()
     return MAZE
-
-def printstate():
-    """
-    Ausgabe des aktuellen Status
-    """
-    for x in range(0, len(MAZE)):
-        s = ""
-        for y in range(0, len(MAZE[x])):
-            s = s + MAZE[x][y]
-        print(s)
 
 def setmarker(var_x, var_y):
     """
@@ -109,15 +99,16 @@ def dfs(var_sp, var_gp, tp1, tp2):
             setmarker(var_x, var_y)
             var_y = stack[-1]
             var_x = stack[-2]
-            printstate()
+            output.printstate()
             print(stack)
             print(var_x)
             print(var_y)
+            time.sleep(.10)
         else:
             if len(stack) == 0:
                 print("Kein Weg zum Ziel gefunden")
                 break
-            printfinalstate(var_sp, var_gp, stack)
+            output.printfinalstate(var_sp, var_gp, stack)
             break
 
 def bfs(var_sp, var_gp, var_tp1, var_tp2):
@@ -164,29 +155,14 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
             stack.pop(0)
             x = stack[0][-1][0]
             y = stack[0][-1][1]
-            printstate()
+            output.printstate()
             print(x)
             print(y)
             i += 1
         else:
             print(stack[0])
-            printfinalstate(var_sp, var_gp, stack)
+            output.printfinalstate(var_sp, var_gp, stack)
             break
-
-def printfinalstate(var_sp, var_gp, stack):
-    """
-    Druckt den finalen Weg aus
-    """
-    if inspect.stack()[1][3] == "bfs":
-        for i in range(0, len(stack[0])):
-            MAZE[stack[0][i][0]][stack[0][i][1]] = '*'
-            i += 1
-    MAZE[var_sp[0]][var_sp[1]] = 'S'
-    MAZE[var_gp[0]][var_gp[1]] = 'G'
-    printstate()
-    #print(x)
-    #print(y)
-
 
 def analyse(maze, char):
     """
@@ -226,57 +202,8 @@ def direction(arrow, x, y):
 
 def euklidischedistanz(sp, gp):
     """
-    Berechnet die Euklidische Distanz zwischen zwei Feldern
+    Berechnet die Euklidische Distanz zwischen zwei Feldern.
+    Übergeben werden eine Liste mit Startund Zielkoordinaten ([0] = x, [1] = y)
+    Rückgabewert ist die Euklidische Distanz als int
     """
     return abs((sp[0]-gp[0])+(sp[1]-gp[1]))
-
-def astar(sp, gp, tp1, tp2):
-    """
-    A* Suche
-    """
-    time.sleep(.10)
-    print(euklidischedistanz(sp, gp))
-    ###
-    x = sp[0]
-    y = sp[1]
-    stack = [[[x, y]]]
-    var_c = []
-    i = 0
-    while True:
-        if goalnotreached(x, y):
-            setmarker(x, y)
-            if neighbourfree('u', x, y):
-                arrow = direction('u', x, y)
-                var_c = copy.deepcopy(stack[0])
-                euklid = euklidischedistanz(sp, gp)
-                var_c.append([arrow[0], arrow[1]])
-                stack.append(var_c)
-            if neighbourfree('r', x, y):
-                arrow = direction('r', x, y)
-                var_c = copy.deepcopy(stack[0])
-                euklid = euklidischedistanz(sp, gp)
-                var_c.append([arrow[0], arrow[1]])
-                stack.append(var_c)
-            if neighbourfree('d', x, y):
-                arrow = direction('d', x, y)
-                var_c = copy.deepcopy(stack[0])
-                euklid = euklidischedistanz(sp, gp)
-                var_c.append([arrow[0], arrow[1]])
-                stack.append(var_c)
-            if neighbourfree('d', x, y):
-                arrow = direction('d', x, y)
-                var_c = copy.deepcopy(stack[0])
-                euklid = euklidischedistanz(sp, gp)
-                var_c.append([arrow[0], arrow[1]])
-                stack.append(var_c)
-            stack.pop(0)
-            x = stack[0][-1][0]
-            y = stack[0][-1][1]
-            printstate()
-            print(x)
-            print(y)
-            i += 1
-        else:
-            print(stack[0])
-            printfinalstate(var_sp, var_gp, stack)
-            break

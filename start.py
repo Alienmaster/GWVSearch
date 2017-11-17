@@ -1,4 +1,8 @@
+"""
+Startdatei
+"""
 import main
+import astar
 
 def start(filename, search):
     """
@@ -17,6 +21,6 @@ def start(filename, search):
     elif search == "breath":
         main.bfs(var_sp, var_gp, tp1, tp2)
     elif search == "astar":
-        main.astar(var_sp, var_gp, tp1, tp2)
+        astar.astar(var_sp, var_gp, tp1, tp2)
 
 start("testmaze.txt", "astar")
