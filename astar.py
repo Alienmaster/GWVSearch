@@ -9,6 +9,14 @@ def astar(sp, gp, tp1, tp2, order):
     A* Suche. Jeder Knoten in der Nachbarschaft wird untersucht und
     zum Heap hinzugefügt mit der dazugehörigen Euklidischen Distanz.
     Danach wird der kleinste Wert als neue x und y erstellt.
+
+    Dabei wird für jeden untersuchten Punkt zunächst für jede Richtung ein Tupel zwischengespeichert,
+    das nachdem alle Richtungen überprüft wurden in den Heap gepusht wird, damit sichergestellt werden
+    kann, dass stets das richtige Tupel verwendet wird.
+
+    Die Tupel im Heap setzen sich zusammen aus:
+
+    (euklidische Distanz + bisherige Weglänge, bisherige Weglänge, neues x, neues y, bisheriger Pfad)
     """
     ###
     x = sp[0]
@@ -47,8 +55,3 @@ def astar(sp, gp, tp1, tp2, order):
         else:
             print(heap[0][4])
             break
-
-        # else:
-        #     print(stack[0])
-        #     output.printfinalstate(sp, gp, stack)
-        #     break
