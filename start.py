@@ -16,11 +16,14 @@ def start(filename, search):
     var_gp = main.analyse(maze, "g")
     tp1 = main.analyse(maze, "1")
     tp2 = main.analyse(maze, "2")
-    if search == "depth":
-        main.dfs(var_sp, var_gp, tp1, tp2)
-    elif search == "breath":
-        main.bfs(var_sp, var_gp, tp1, tp2)
-    elif search == "astar":
-        astar.astar(var_sp, var_gp, tp1, tp2, reihenfolge)
+    try:
+        if search == "depth":
+            main.dfs(var_sp, var_gp, tp1, tp2)
+        elif search == "breath":
+            main.bfs(var_sp, var_gp, tp1, tp2)
+        elif search == "astar":
+            astar.astar(var_sp, var_gp, tp1, tp2)
+    except IndexError:
+        print("Es gibt keinen gültigen Pfad oder die Außenwand enthält ein Loch.")
 
 start("testmaze.txt", "astar")

@@ -4,7 +4,7 @@ from heapq import heappush, heappop
 import main
 import output
 
-def astar(sp, gp, tp1, tp2, order):
+def astar(sp, gp, tp1, tp2):
     """
     A* Suche. Jeder Knoten in der Nachbarschaft wird untersucht und
     zum Heap hinzugefügt mit der dazugehörigen Euklidischen Distanz.
