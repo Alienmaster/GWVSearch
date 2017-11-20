@@ -21,6 +21,10 @@ def printfinalstate(var_sp, var_gp, stack):
         for i in range(0, len(stack[0])):
             main.MAZE[stack[0][i][0]][stack[0][i][1]] = '*'
             i += 1
+    elif inspect.stack()[1][3] == "astar":
+        for i in range(0, len(stack[0][4])):
+            main.MAZE[stack[0][4][i][0]][stack[0][4][i][1]] = '*'
+            i += 1
     main.MAZE[var_sp[0]][var_sp[1]] = 'S'
     main.MAZE[var_gp[0]][var_gp[1]] = 'G'
     printstate()

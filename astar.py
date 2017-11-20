@@ -21,6 +21,8 @@ def astar(sp, gp, tp1, tp2):
     ###
     x = sp[0]
     y = sp[1]
+    stepsmade=0
+    maxfrontier=0
     heap = []
     heappush(heap, (gp[0]-x+gp[1]-y,0, x, y, [[x,y]]))
     while True:
@@ -31,19 +33,28 @@ def astar(sp, gp, tp1, tp2):
                 euklid = gp[0] - (x-1) + (gp[1] - y)
                 u = (heap[0][1]+euklid,heap[0][1]+1, x-1, y, heap[0][4]+[[x-1, y]])
                 topush.append(u)
+                stepsmade += 1
+                maxfrontier += 1
             if(main.neighbourfree('r', x, y)):
                 euklid = gp[0] - x + (gp[1] - (y+1))
                 r = (heap[0][1]+euklid,heap[0][1]+1, x, y+1, heap[0][4]+[[x, y+1]])
                 topush.append(r)
+                stepsmade += 1
+                maxfrontier += 1
             if(main.neighbourfree('d', x, y)):
                 euklid = gp[0] - (x+1) + (gp[1] - y)
                 d = (heap[0][1]+euklid,heap[0][1]+1, x+1, y, heap[0][4]+[[x+1, y]])
                 topush.append(d)
+                stepsmade += 1
+                maxfrontier += 1
             if(main.neighbourfree('l', x, y)):
                 euklid = gp[0] - x + (gp[1] - (y-1))
                 l = (heap[0][1]+euklid,heap[0][1]+1, x, y-1, heap[0][4]+[[x, y-1]])
                 topush.append(l)
+                stepsmade += 1
+                maxfrontier += 1
             heappop(heap)
+            maxfrontier -= 1
             while not len(topush) == 0:
                 heappush(heap, topush[0])
                 topush.pop(0)
@@ -54,4 +65,7 @@ def astar(sp, gp, tp1, tp2):
             #time.sleep(.10)
         else:
             print(heap[0][4])
+            output.printfinalstate(sp, gp, heap)
+            print("Steps made: "+str(stepsmade))
+            print("Max Frontier used: "+str(maxfrontier))
             break

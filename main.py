@@ -70,24 +70,35 @@ def dfs(var_sp, var_gp, tp1, tp2):
     stack = []
     stack.append(var_x)
     stack.append(var_y)
+    stepsmade = 0
+    maxfrontier = 0
     #reihenfolge = ['u', 'r', 'd', 'l']
     while True:
         if goalnotreached(var_x, var_y):
             if neighbourfree('u', var_x, var_y):
                 stack.append(var_x-1)
                 stack.append(var_y)
+                stepsmade += 1
+                maxfrontier += 1
             elif neighbourfree('r', var_x, var_y):
                 stack.append(var_x)
                 stack.append(var_y+1)
+                stepsmade += 1
+                maxfrontier += 1
             elif neighbourfree('d', var_x, var_y):
                 stack.append(var_x+1)
                 stack.append(var_y)
+                stepsmade += 1
+                maxfrontier += 1
             elif neighbourfree('l', var_x, var_y):
                 stack.append(var_x)
                 stack.append(var_y-1)
+                stepsmade += 1
+                maxfrontier += 1
             else:
                 stack.pop()
                 stack.pop()
+                maxfrontier-=1
             if MAZE[stack[-2]][stack[-1]] == '1':
                 portalend = portal(stack[-2], stack[-1], tp1)
                 stack.append(portalend[0])
@@ -108,6 +119,8 @@ def dfs(var_sp, var_gp, tp1, tp2):
             if len(stack) == 0:
                 print("Kein Weg zum Ziel gefunden")
                 break
+            print("Steps made: "+str(stepsmade))
+            print("Max Frontier used: "+str(maxfrontier))
             output.printfinalstate(var_sp, var_gp, stack)
             break
 
@@ -120,6 +133,8 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
     stack = [[[x, y]]]
     var_c = []
     i = 0
+    stepsmade=0
+    maxfrontier=0
     while True:
         if goalnotreached(x, y):
             setmarker(x, y)
@@ -127,18 +142,26 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
                 var_c = copy.deepcopy(stack[0])
                 var_c.append([x-1, y])
                 stack.append(var_c)
+                stepsmade += 1
+                maxfrontier += 1
             if neighbourfree('r', x, y):
                 var_c = copy.deepcopy(stack[0])
                 var_c.append([x, y+1])
                 stack.append(var_c)
+                stepsmade += 1
+                maxfrontier += 1
             if neighbourfree('d', x, y):
                 var_c = copy.deepcopy(stack[0])
                 var_c.append([x+1, y])
                 stack.append(var_c)
+                stepsmade += 1
+                maxfrontier += 1
             if neighbourfree('l', x, y):
                 var_c = copy.deepcopy(stack[0])
                 var_c.append([x, y-1])
                 stack.append(var_c)
+                stepsmade += 1
+                maxfrontier += 1
             """
             if MAZE[1][9] == '1':
                 print(stack, stack[0][-1][1])
@@ -153,6 +176,7 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
                 stack.append(gp[1])
             """
             stack.pop(0)
+            maxfrontier -=1
             x = stack[0][-1][0]
             y = stack[0][-1][1]
             output.printstate()
@@ -161,6 +185,8 @@ def bfs(var_sp, var_gp, var_tp1, var_tp2):
             i += 1
         else:
             print(stack[0])
+            print("Steps made: "+str(stepsmade))
+            print("Max Frontier used: "+str(maxfrontier))
             output.printfinalstate(var_sp, var_gp, stack)
             break
 
