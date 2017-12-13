@@ -4,24 +4,37 @@ Sebastian Stelter
 Florian Schmalzl
 Robert Geislinger
 """
+from collections import defaultdict
+import re
+import json
+import random
 #Labyrinth
-d = {}
-#Dateiliste einlesen
-def readfile(filename, encoding='UTF8'):
+d = defaultdict(list)
+#Labyrinth einlesen
+def importfile(filename):
     """
     Textfile wird eingelesen und als Array returnd
     """
-    with open(filename) as var_f:
+    with open(filename, encoding="utf8") as var_f:
         firstline = ""
-        
         for line in var_f:
-            try:
-                #d[firstline] = line
-                #firstline = line
-                #print(len(d))
-                print(line)
-            except:
-                continue
-        len(d)
-readfile("ggcc-one-word-per-line.txt")
-len(d)
+            line = re.sub('\n$', '', line)
+            value = d[firstline]
+            value.append(line)
+            d[firstline] = value
+            firstline = line
+            #print(value)
+
+importfile("ggcc-one-word-per-line.txt")
+
+#with open('data.json', 'w') as fp:
+#    json.dump(d, fp)
+
+print(len(d))
+print(d["ich"])
+acc = 7
+start = "ich"
+while acc != 0:
+    word = random.choice(d[start])
+    print(word)
+    acc-1
