@@ -8,12 +8,12 @@ from collections import defaultdict
 import re
 import json
 import random
-#Labyrinth
+#Dictionary
 d = defaultdict(list)
-#Labyrinth einlesen
+#Wortliste einlesen
 def importfile(filename):
     """
-    Textfile wird eingelesen und als Array returnd
+    Textfile wird eingelesen und als Dictionary abgelegt
     """
     with open(filename, encoding="utf8") as var_f:
         firstline = ""
@@ -30,11 +30,15 @@ importfile("ggcc-one-word-per-line.txt")
 #with open('data.json', 'w') as fp:
 #    json.dump(d, fp)
 
-print(len(d))
-print(d["ich"])
-acc = 7
-start = "ich"
+#Ausgabe Beispielliste für das Wort "ich"
+#print(d["ich"])
+#Zähler wieviele Worte ausgegeben werden sollen
+acc = 15
+#Anfangswort
+start = "mama"
+print(start, end=" ")
 while acc != 0:
     word = random.choice(d[start])
-    print(word)
-    acc-1
+    print(word, end=" ")
+    acc = acc-1
+    start = word
