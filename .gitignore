@@ -1,3 +1,5 @@
 __pycache__
 .vscode
 ggcc-one-word-per-line.txt
+hdt-1-10000-train.tags
+hdt-10001-12000-test.tags
