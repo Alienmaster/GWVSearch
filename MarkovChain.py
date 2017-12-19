@@ -35,10 +35,12 @@ importfile("ggcc-one-word-per-line.txt")
 #Zähler wieviele Worte ausgegeben werden sollen
 acc = 15
 #Anfangswort
-start = "mama"
+start = "Mama"
 print(start, end=" ")
-while acc != 0:
-    word = random.choice(d[start])
-    print(word, end=" ")
-    acc = acc-1
-    start = word
+try:
+    while acc != 0:
+        word = random.choice(d[start])
+        print(word, end=" ")
+        acc = acc-1
+        start = word
+except: print ("Wort nicht enthalten")
