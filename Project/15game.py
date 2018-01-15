@@ -5,12 +5,13 @@ Moves = []
 
 
 def movePossible():
-	//TODO
+	#TODO
 	return True
 
 
 def moveLeft():
-	global Input
+	global Input, Moves
+	Moves.append("L")
 	if movePossible():
 		for i in range(0, len(Input)-1):
 			for j in range(0,len(Input[i])-1):
@@ -21,7 +22,8 @@ def moveLeft():
 					return
 
 def moveRight():
-	global Input
+	global Input, Moves
+	Moves.append("R")
 	if movePossible():
 		for i in range(0, len(Input)-1):
 			for j in range(0,len(Input[i])-1):
@@ -32,7 +34,8 @@ def moveRight():
 					return
 
 def moveUp():
-	global Input
+	global Input, Moves
+	Moves.append("U")
 	if movePossible():
 		for i in range(0, len(Input)-1):
 			for j in range(0,len(Input[i])-1):
@@ -43,7 +46,8 @@ def moveUp():
 					return
 
 def moveDown():
-	global Input
+	global Input, Moves
+	Moves.append("D")
 	if movePossible():
 		for i in range(0, len(Input)-1):
 			for j in range(0,len(Input[i])-1):
@@ -62,4 +66,5 @@ moveDown()
 print(Input)
 moveUp()
 print(Input)
+print(Moves)
 
