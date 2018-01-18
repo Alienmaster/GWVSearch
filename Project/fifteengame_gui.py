@@ -7,6 +7,7 @@ class gameUI():
 
 	def __init__(self, state):
 
+		self.state = state
 		self.buttons = []
 		self.master = Tk()
 		self.fifteenFrame = Frame(self.master)
@@ -15,8 +16,8 @@ class gameUI():
 		self.functionsFrame.pack()
 		self.solveButton = Button(self.functionsFrame, text="Solve puzzle!")
 		self.solveButton.pack()
-
-		self.loadState(state)
+		self.l = fifteengame.gamelogic()
+		self.loadState(self.state)
 
 
 		self.master.mainloop()
@@ -37,8 +38,12 @@ class gameUI():
 				c += 1
 
 	def handleGameMove(self, event):
-		self.master.title('It works!')
+		c = 0
+		for i in range(0, len(self.state)):
+			for j in range(0, len(self.state[i])):
+				if event.widget["text"] == str(self.state[i][j]):
+					print(self.buttons[c]["text"])
+					break
+				c += 1
 
-
-l = fifteengame.gamelogic()
 g = gameUI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,'X', 15]])
