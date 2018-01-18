@@ -1,70 +1,71 @@
-Input = [[],[],[],[]]
-#Goal = [[1,2,3,4][5,6,7,8][9,10,11,12][13,14,15,X]]
-Moves = []
+class gamelogic():
+
+	def __init__(self):
+		self.Moves = []
+
+	def returnMovesAsString():
+		#TODO
+		return
+
+	def movePossible(input, direction):
+		#TODO
+		return True
 
 
-
-def movePossible():
-	#TODO
-	return True
-
-
-def moveLeft():
-	global Input, Moves
-	Moves.append("L")
-	if movePossible():
-		for i in range(0, len(Input)-1):
-			for j in range(0,len(Input[i])-1):
+	def moveLeft(self, state):
+		Input = state
+		d = False
+		self.Moves.append("L")
+		#if movePossible():
+		for i in range(0, len(Input)):
+			for j in range(0,len(Input[i])):
 				if Input[i][j] == 'X':
 					t = Input[i][j-1]
 					Input[i][j-1] = 'X'
 					Input[i][j] = t
-					return
+					break
+		return Input
 
-def moveRight():
-	global Input, Moves
-	Moves.append("R")
-	if movePossible():
+	def moveRight(self, state):
+		Input = state
+		self.Moves.append("R")
+		#if movePossible():
 		for i in range(0, len(Input)-1):
 			for j in range(0,len(Input[i])-1):
 				if Input[i][j] == 'X':
+					print(Input)
 					t = Input[i][j+1]
 					Input[i][j+1] = 'X'
 					Input[i][j] = t
-					return
+					break
+		return Input
 
-def moveUp():
-	global Input, Moves
-	Moves.append("U")
-	if movePossible():
-		for i in range(0, len(Input)-1):
-			for j in range(0,len(Input[i])-1):
+	def moveUp(self, state):
+		Input = state
+		self.Moves.append("U")
+		#if movePossible():
+		for i in range(0, len(Input)):
+			for j in range(0,len(Input[i])):
 				if Input[i][j] == 'X':
 					t = Input[i-1][j]
 					Input[i-1][j] = 'X'
 					Input[i][j] = t
-					return
+					break
+		return Input
 
-def moveDown():
-	global Input, Moves
-	Moves.append("D")
-	if movePossible():
+	def moveDown(self, state):
+		Input = state
+		d = False
+		self.Moves.append("D")
+		#if movePossible():
 		for i in range(0, len(Input)-1):
 			for j in range(0,len(Input[i])-1):
 				if Input[i][j] == 'X':
 					t = Input[i+1][j]
 					Input[i+1][j] = 'X'
 					Input[i][j] = t
-					return
-
-Input = [	[1,'X',3,4],
-			[5,2,7,8],
-			[9,6,11,12],
-			[13,10,14,15]]
-
-moveDown()
-print(Input)
-moveUp()
-print(Input)
-print(Moves)
-
+					d = True
+					break
+			if d == True:
+				break
+		return Input

@@ -24,6 +24,10 @@ class gameUI():
 
 	def loadState(self, state):
 		c = 0
+		for widget in self.fifteenFrame.winfo_children():
+			widget.destroy()
+		self.fifteenFrame.update()
+		self.buttons = []
 		for x in range(0, len(state)):
 			for y in range(0, len(state[x])):
 				b = Button(self.fifteenFrame, text="", width=20, height=10)
@@ -42,8 +46,26 @@ class gameUI():
 		for i in range(0, len(self.state)):
 			for j in range(0, len(self.state[i])):
 				if event.widget["text"] == str(self.state[i][j]):
-					print(self.buttons[c]["text"])
-					break
+					if j + 1 <= (len(self.state[i]))-1: 
+						if self.state[i][j+1] == 'X':
+							self.state = self.l.moveLeft(self.state)
+							self.loadState(self.state)
+							return
+					if j - 1 >= 0:
+						if self.state[i][j-1] == 'X':
+							self.state = self.l.moveRight(self.state)
+							self.loadState(self.state)
+							return
+					if i + 1 <= len(self.state)-1:
+						if self.state[i+1][j] == 'X':
+							self.state = self.l.moveUp(self.state)
+							self.loadState(self.state)
+							return
+					if i - 1 >= 0:
+						if self.state[i-1][j] == 'X':
+							self.state = self.l.moveDown(self.state)
+							self.loadState(self.state)
+							return
 				c += 1
 
 g = gameUI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,'X', 15]])
