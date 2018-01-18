@@ -30,7 +30,7 @@ class gamelogic():
 		Input = state
 		self.Moves.append("R")
 		#if movePossible():
-		for i in range(0, len(Input)-1):
+		for i in range(0, len(Input)):
 			for j in range(0,len(Input[i])-1):
 				if Input[i][j] == 'X':
 					print(Input)
@@ -59,7 +59,7 @@ class gamelogic():
 		self.Moves.append("D")
 		#if movePossible():
 		for i in range(0, len(Input)-1):
-			for j in range(0,len(Input[i])-1):
+			for j in range(0,len(Input[i])):
 				if Input[i][j] == 'X':
 					t = Input[i+1][j]
 					Input[i+1][j] = 'X'
