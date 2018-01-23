@@ -1,7 +1,28 @@
+import puzzleheuristics
+from random import *
+
 class gamelogic():
 
 	def __init__(self):
+		self.h = puzzleheuristics.PuzzleHeuristics()
 		self.Moves = []
+		self.goalState = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,'X']]
+
+	def generateRandomField(self):
+		state = self.goalState
+		for i in range(0, 100):
+			t = randint(1, 4)
+			if t == 1:
+				state = self.moveLeft(state)
+			elif t == 2:
+				state = self.moveRight(state)
+			elif t == 3:
+				state = self.moveUp(state)
+			elif t == 4:
+				state = self.moveDown(state)
+		return state
+
+
 
 	def returnMovesAsString():
 		#TODO
@@ -33,7 +54,6 @@ class gamelogic():
 		for i in range(0, len(Input)):
 			for j in range(0,len(Input[i])-1):
 				if Input[i][j] == 'X':
-					print(Input)
 					t = Input[i][j+1]
 					Input[i][j+1] = 'X'
 					Input[i][j] = t

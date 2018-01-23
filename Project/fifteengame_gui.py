@@ -16,6 +16,9 @@ class gameUI():
 		self.functionsFrame.pack()
 		self.solveButton = Button(self.functionsFrame, text="Solve puzzle!")
 		self.solveButton.pack()
+		self.generateRandomButton = Button(self.functionsFrame, text="Generate new Puzzle!")
+		self.generateRandomButton.pack()
+		self.generateRandomButton.bind('<Button-1>', self.handleGenerateButton)
 		self.l = fifteengame.gamelogic()
 		self.loadState(self.state)
 
@@ -40,6 +43,10 @@ class gameUI():
 				if state[i][j] == 'X':
 					self.buttons[c].grid_remove()
 				c += 1
+
+	def handleGenerateButton(self, event):
+		self.state = self.l.generateRandomField()
+		self.loadState(self.state)
 
 	def handleGameMove(self, event):
 		c = 0
@@ -68,4 +75,4 @@ class gameUI():
 							return
 				c += 1
 
-g = gameUI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,'X', 15]])
+g = gameUI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,'X']])
