@@ -20,9 +20,34 @@ class gamelogic():
 				state = self.moveUp(state)
 			elif t == 4:
 				state = self.moveDown(state)
+		if not self.isValidState(state):
+			state = self.generateRandomField()		
 		return state
 
+	def isValidState(self, state):
+		liststate = []
+		integrityCounter = 0
 
+		#convert field to list for calculations and calculates vertical displacement parity
+		for i in range(0, len(state)):
+			for j in state[i]:
+				if j == 'X':
+					integrityCounter += i+1
+				else:
+					liststate.append(j)
+
+		# calculates horizontal displacement parity
+		for i in range(0, len(liststate)):
+			if not liststate[i] == liststate[0]:
+				for j in range(0, i-1):
+					if liststate[j] > liststate[i]:
+						integrityCounter += 1
+
+		#returns if the state is valid (parity can be divided by 2)
+		if integrityCounter % 2 == 0:
+			return True
+		else:
+			return False
 
 	def returnMovesAsString():
 		#TODO
