@@ -82,6 +82,10 @@ class gameUI():
 		self.l.resetMoves()
 		self.loadState(self.state)
 
+	def handleSolveButton(self,event):
+		self.state = self.l.astar(self.state)
+		self.loadState(self.state)
+
 	def handleGameMove(self, event):
 		c = 0
 		for i in range(0, len(self.state)):
