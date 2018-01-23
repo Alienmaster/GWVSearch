@@ -49,10 +49,11 @@ class gamelogic():
 		else:
 			return False
 
-	def returnMovesAsString():
-		#TODO
-		return
+	def returnMoves(self):
+		return self.Moves
 
+	def resetMoves(self):
+		self.Moves = []
 	def movePossible(input, direction):
 		#TODO
 		return True

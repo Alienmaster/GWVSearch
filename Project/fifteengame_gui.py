@@ -17,11 +17,22 @@ class gameUI():
 		self.fifteenFrame.pack()
 		self.functionsFrame = Frame(self.master, padx=20, pady=35)
 		self.functionsFrame.pack()
+
 		self.solveButton = Button(self.functionsFrame, text="Solve puzzle!")
-		self.solveButton.pack()
+		self.solveButton.pack(side=LEFT, padx=5)
 		self.generateRandomButton = Button(self.functionsFrame, text="Generate new Puzzle!")
-		self.generateRandomButton.pack()
+		self.generateRandomButton.pack(side=RIGHT)
 		self.generateRandomButton.bind('<Button-1>', self.handleGenerateButton)
+
+		self.textFrame = Frame(self.master, pady=20)
+		self.textFrame.pack()
+		self.scrollbar = Scrollbar(self.textFrame)
+		self.scrollbar.pack(side=RIGHT, fill=Y)
+		self.listbox = Listbox(self.textFrame, height=5)
+		self.listbox.pack()
+		self.listbox.config(yscrollcommand=self.scrollbar.set)
+		self.scrollbar.config(command=self.listbox.yview)
+
 		self.l = fifteengame.gamelogic()
 		self.loadState(self.state)
 
@@ -45,12 +56,17 @@ class gameUI():
 				if state[i][j] == 'X':
 					self.buttons[c].grid_remove()
 				c += 1
+		self.listbox.delete(0, END)
+		for i in self.l.returnMoves():
+			self.listbox.insert(END, i)
 		if (self.state == self.goalstate) and (not (str(inspect.stack()[1][3]) == "__init__")):
 			messagebox.showinfo("Done!", "The Puzzle has been solved!")
 
 
+
 	def handleGenerateButton(self, event):
 		self.state = self.l.generateRandomField()
+		self.l.resetMoves()
 		self.loadState(self.state)
 
 	def handleGameMove(self, event):
