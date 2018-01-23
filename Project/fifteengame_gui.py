@@ -19,10 +19,16 @@ class gameUI():
 		self.functionsFrame.pack()
 
 		self.solveButton = Button(self.functionsFrame, text="Solve puzzle!")
-		self.solveButton.pack(side=LEFT, padx=5)
+		self.solveButton.grid(row=0, column=0, padx=5, pady=5)
 		self.generateRandomButton = Button(self.functionsFrame, text="Generate new Puzzle!")
-		self.generateRandomButton.pack(side=RIGHT)
+		self.generateRandomButton.grid(row=0, column=1, padx=5, pady=5)
 		self.generateRandomButton.bind('<Button-1>', self.handleGenerateButton)
+		self.resetButton = Button(self.functionsFrame, text="Reset")
+		self.resetButton.grid(row=1, column=0, padx=5, pady=5)
+		self.resetButton.bind('<Button-1>', self.handleReset)
+		self.clearButton = Button(self.functionsFrame, text="Clear Moves")
+		self.clearButton.grid(row=1, column=1, padx=5, pady=5)
+		self.clearButton.bind('<Button-1>', self.handleClear)
 
 		self.textFrame = Frame(self.master, pady=20)
 		self.textFrame.pack()
@@ -59,10 +65,17 @@ class gameUI():
 		self.listbox.delete(0, END)
 		for i in self.l.returnMoves():
 			self.listbox.insert(END, i)
-		if (self.state == self.goalstate) and (not (str(inspect.stack()[1][3]) == "__init__")):
+		if (self.state == self.goalstate) and (not (str(inspect.stack()[1][3]) == "__init__") and (not (str(inspect.stack()[1][3]) == "handleReset"))):
 			messagebox.showinfo("Done!", "The Puzzle has been solved!")
 
+	def handleClear(self, event):
+		self.l.resetMoves()
+		self.loadState(self.state)
 
+	def handleReset(self, event):
+		self.state = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,'X']]
+		self.l.resetMoves()
+		self.loadState(self.state)
 
 	def handleGenerateButton(self, event):
 		self.state = self.l.generateRandomField()
