@@ -1,6 +1,8 @@
 #!/usr/bin/python
 import fifteengame
+import inspect
 from tkinter import *
+from tkinter import messagebox
 
 
 class gameUI():
@@ -8,6 +10,7 @@ class gameUI():
 	def __init__(self, state):
 
 		self.state = state
+		self.goalstate = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,'X']]
 		self.buttons = []
 		self.master = Tk()
 		self.fifteenFrame = Frame(self.master)
@@ -21,7 +24,6 @@ class gameUI():
 		self.generateRandomButton.bind('<Button-1>', self.handleGenerateButton)
 		self.l = fifteengame.gamelogic()
 		self.loadState(self.state)
-
 
 		self.master.mainloop()
 
@@ -43,6 +45,9 @@ class gameUI():
 				if state[i][j] == 'X':
 					self.buttons[c].grid_remove()
 				c += 1
+		if (self.state == self.goalstate) and (not (str(inspect.stack()[1][3]) == "__init__")):
+			messagebox.showinfo("Done!", "The Puzzle has been solved!")
+
 
 	def handleGenerateButton(self, event):
 		self.state = self.l.generateRandomField()
