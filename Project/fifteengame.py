@@ -55,7 +55,25 @@ class gamelogic():
 	def resetMoves(self):
 		self.Moves = []
 
+	def returnPossibleMoves(self, state):
+		possible=[]
+		for i in range(0, len(state)):
+			for j in range(0, len(state[i])):
+				if state[i][j] == 'X':
+					if j > 0:
+						possible.append('L')
+					if j < len(state[i])-1:
+						possible.append('R')
+					if i > 0:
+						possible.append('U')
+					if i < len(state)-1:
+						possible.append('D')
+		return possible
+
 	def astar(self, state):
+		path = [state]
+		node = state
+
 		return
 		#TODO
 

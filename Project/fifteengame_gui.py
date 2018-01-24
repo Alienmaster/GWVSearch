@@ -52,7 +52,7 @@ class gameUI():
 		self.buttons = []
 		for x in range(0, len(state)):
 			for y in range(0, len(state[x])):
-				b = Button(self.fifteenFrame, text="", width=20, height=10)
+				b = Button(self.fifteenFrame, text="", width=10, height=4)
 				b.grid(row=x, column=y)
 				b.bind('<Button-1>', self.handleGameMove)
 				self.buttons.append(b)
@@ -65,6 +65,7 @@ class gameUI():
 		self.listbox.delete(0, END)
 		for i in self.l.returnMoves():
 			self.listbox.insert(END, i)
+		print(self.l.returnPossibleMoves(self.state))
 		if (self.state == self.goalstate) and (not (str(inspect.stack()[1][3]) == "__init__") and (not (str(inspect.stack()[1][3]) == "handleReset"))):
 			messagebox.showinfo("Done!", "The Puzzle has been solved!")
 
