@@ -1,6 +1,7 @@
 import puzzleheuristics
+from heapq import *
 from random import *
-
+import copy
 class gamelogic():
 
 	def __init__(self):
@@ -71,9 +72,51 @@ class gamelogic():
 		return possible
 
 	def astar(self, state):
-		path = [state]
-		node = state
-
+		visitedStates = []
+		visitedStates.append(copy.deepcopy(state))
+		#Elements in heap: (Cost, Current State, Path taken(nodes), Path taken(moves) )
+		heap = []
+		heappush(heap, (self.h.calcMD(state), state, [state], []))
+		while not heap == []:
+			node = heappop(heap)
+			print("node "+str(node))
+			if node == self.goalState:
+				return node
+			for i in self.returnPossibleMoves(node[1]):
+				if i == 'U':
+					print('u')
+					t = self.moveUp(node[1])
+					if not t in visitedStates:
+						n1 = copy.deepcopy(node)
+						t1 = copy.deepcopy(t)
+						heappush(heap, (self.h.calcMD(t1)+1, t1, n1[2].append(t1), n1[3].append('U')))
+						visitedStates.append(t1)
+				if i == 'D':
+					print('d')
+					t = self.moveDown(node[1])
+					if not t in visitedStates:
+						n2 = copy.deepcopy(node)
+						t2 = copy.deepcopy(t)
+						heappush(heap, (self.h.calcMD(t2)+1, t2, n2[2].append(t), n2[3].append('D')))
+						visitedStates.append(t2)
+				if i == 'L':
+					print('l')
+					t = self.moveLeft(node[1])
+					if not t in visitedStates:
+						n3 = copy.deepcopy(node)
+						t3 = copy.deepcopy(t)
+						heappush(heap, (self.h.calcMD(t3)+1, t3, n3[2].append(t3), n3[3].append('L')))
+						visitedStates.append(t3)
+				if i == 'R':
+					print('r')
+					t = self.moveRight(node[1])
+					if not t in visitedStates:
+						n4 = copy.deepcopy(node)
+						t4 = copy.deepcopy(t)
+						heappush(heap, (self.h.calcMD(t4)+1, t4, n4[2].append(t4), n4[3].append('R')))
+						visitedStates.append(t4)
+				print("heap "+str(heap))
+		print("Something went wrong!")
 		return
 		#TODO
 

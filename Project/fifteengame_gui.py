@@ -20,6 +20,7 @@ class gameUI():
 
 		self.solveButton = Button(self.functionsFrame, text="Solve puzzle!")
 		self.solveButton.grid(row=0, column=0, padx=5, pady=5)
+		self.solveButton.bind('<Button-1>', self.handleSolveButton)
 		self.generateRandomButton = Button(self.functionsFrame, text="Generate new Puzzle!")
 		self.generateRandomButton.grid(row=0, column=1, padx=5, pady=5)
 		self.generateRandomButton.bind('<Button-1>', self.handleGenerateButton)
@@ -84,7 +85,8 @@ class gameUI():
 		self.loadState(self.state)
 
 	def handleSolveButton(self,event):
-		self.state = self.l.astar(self.state)
+		node = self.l.astar(self.state)
+		print(node)
 		self.loadState(self.state)
 
 	def handleGameMove(self, event):

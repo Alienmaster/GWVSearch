@@ -26,7 +26,7 @@ class PuzzleHeuristics:
         goalCoords = self.getGoalCoordinates(matrix)
         for y in range(0, len(matrix)):
             for x in range(0, len(matrix[y])):
-                if matrix[y][x] != 0:
+                if matrix[y][x] != 'X':
                     xGoal, yGoal = goalCoords[matrix[y][x] - 1]
                     distance += abs(x - xGoal) + abs(y - yGoal)            
         
