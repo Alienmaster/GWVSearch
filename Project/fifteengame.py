@@ -77,39 +77,43 @@ class gamelogic():
 		visitedStates.append(copy.deepcopy(state))
 		#Elements in heap: (Cost, Current State, Path taken(nodes), Path taken(moves) )
 		heap = []
+		visited = []
 		heappush(heap, (self.h.calcMD(state), state, [state], []))
 		while not heap == []:
 			topush = []
-			print(heap[0][1])
-			time.sleep(.10)
+			#print(heap[0][3])
 			if heap[0][1] == self.goalState:
 				return heap[0]
 				break
 			for i in self.returnPossibleMoves(heap[0][1]):
 				if i == 'U':
 					t1 = self.moveUp(copy.deepcopy(heap[0][1]))
-					print('u' + str(t1))
-					if not t1 in heap[0][3]:
+					#print('u' + str(t1))
+					if not t1 in visited:
 						u = (self.h.calcMD(t1)+1, t1, heap[0][2]+[t1], heap[0][3]+['U'])
 						topush.append(u)
+						visited.append(t1)
 				if i == 'D':
 					t2 = self.moveDown(copy.deepcopy(heap[0][1]))
-					print('d'+ str(t2))
-					if not t2 in heap[0][3]:
+					#print('d'+ str(t2))
+					if not t2 in visited:
 						d = (self.h.calcMD(t2)+1, t2, heap[0][2]+[t2], heap[0][3]+['D'])
 						topush.append(d)
+						visited.append(t2)
 				if i == 'L':
 					t3 = self.moveLeft(copy.deepcopy(heap[0][1]))
-					print('l' + str(t3))
-					if not t3 in heap[0][3]:
+					#print('l' + str(t3))
+					if not t3 in visited:
 						l = (self.h.calcMD(t3)+1, t3, heap[0][2]+[t3], heap[0][3]+['L'])
 						topush.append(l)
+						visited.append(t3)
 				if i == 'R':
 					t4 = self.moveRight(copy.deepcopy(heap[0][1]))
-					print('r'+str(t4))
-					if not t4 in heap[0][3]:
+					#print('r'+str(t4))
+					if not t4 in visited:
 						r = (self.h.calcMD(t4)+1, t4, heap[0][2]+[t4], heap[0][3]+['R'])
 						topush.append(r)
+						visited.append(t4)
 			heappop(heap)
 			while not len(topush) == 0:
 				heappush(heap, topush[0])
