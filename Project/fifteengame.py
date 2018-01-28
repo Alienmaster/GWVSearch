@@ -1,16 +1,17 @@
 import puzzleheuristics
-from heapq import *
+from heapq import heappush, heappop
 from random import *
+import time
 import copy
 class gamelogic():
 
 	def __init__(self):
 		self.h = puzzleheuristics.PuzzleHeuristics()
 		self.Moves = []
-		self.goalState = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,'X']]
+		self.goalState = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
 
 	def generateRandomField(self):
-		state = self.goalState
+		state = copy.deepcopy(self.goalState)
 		for i in range(0, 100):
 			t = randint(1, 4)
 			if t == 1:
@@ -32,7 +33,7 @@ class gamelogic():
 		#convert field to list for calculations and calculates vertical displacement parity
 		for i in range(0, len(state)):
 			for j in state[i]:
-				if j == 'X':
+				if j == 0:
 					integrityCounter += i+1
 				else:
 					liststate.append(j)
@@ -60,7 +61,7 @@ class gamelogic():
 		possible=[]
 		for i in range(0, len(state)):
 			for j in range(0, len(state[i])):
-				if state[i][j] == 'X':
+				if state[i][j] == 0:
 					if j > 0:
 						possible.append('L')
 					if j < len(state[i])-1:
@@ -78,44 +79,42 @@ class gamelogic():
 		heap = []
 		heappush(heap, (self.h.calcMD(state), state, [state], []))
 		while not heap == []:
-			node = heappop(heap)
-			print("node "+str(node))
-			if node == self.goalState:
-				return node
-			for i in self.returnPossibleMoves(node[1]):
+			topush = []
+			print(heap[0][1])
+			time.sleep(.10)
+			if heap[0][1] == self.goalState:
+				return heap[0]
+				break
+			for i in self.returnPossibleMoves(heap[0][1]):
 				if i == 'U':
-					print('u')
-					t = self.moveUp(node[1])
-					if not t in visitedStates:
-						n1 = copy.deepcopy(node)
-						t1 = copy.deepcopy(t)
-						heappush(heap, (self.h.calcMD(t1)+1, t1, n1[2].append(t1), n1[3].append('U')))
-						visitedStates.append(t1)
+					t1 = self.moveUp(copy.deepcopy(heap[0][1]))
+					print('u' + str(t1))
+					if not t1 in heap[0][3]:
+						u = (self.h.calcMD(t1)+1, t1, heap[0][2]+[t1], heap[0][3]+['U'])
+						topush.append(u)
 				if i == 'D':
-					print('d')
-					t = self.moveDown(node[1])
-					if not t in visitedStates:
-						n2 = copy.deepcopy(node)
-						t2 = copy.deepcopy(t)
-						heappush(heap, (self.h.calcMD(t2)+1, t2, n2[2].append(t), n2[3].append('D')))
-						visitedStates.append(t2)
+					t2 = self.moveDown(copy.deepcopy(heap[0][1]))
+					print('d'+ str(t2))
+					if not t2 in heap[0][3]:
+						d = (self.h.calcMD(t2)+1, t2, heap[0][2]+[t2], heap[0][3]+['D'])
+						topush.append(d)
 				if i == 'L':
-					print('l')
-					t = self.moveLeft(node[1])
-					if not t in visitedStates:
-						n3 = copy.deepcopy(node)
-						t3 = copy.deepcopy(t)
-						heappush(heap, (self.h.calcMD(t3)+1, t3, n3[2].append(t3), n3[3].append('L')))
-						visitedStates.append(t3)
+					t3 = self.moveLeft(copy.deepcopy(heap[0][1]))
+					print('l' + str(t3))
+					if not t3 in heap[0][3]:
+						l = (self.h.calcMD(t3)+1, t3, heap[0][2]+[t3], heap[0][3]+['L'])
+						topush.append(l)
 				if i == 'R':
-					print('r')
-					t = self.moveRight(node[1])
-					if not t in visitedStates:
-						n4 = copy.deepcopy(node)
-						t4 = copy.deepcopy(t)
-						heappush(heap, (self.h.calcMD(t4)+1, t4, n4[2].append(t4), n4[3].append('R')))
-						visitedStates.append(t4)
-				print("heap "+str(heap))
+					t4 = self.moveRight(copy.deepcopy(heap[0][1]))
+					print('r'+str(t4))
+					if not t4 in heap[0][3]:
+						r = (self.h.calcMD(t4)+1, t4, heap[0][2]+[t4], heap[0][3]+['R'])
+						topush.append(r)
+			heappop(heap)
+			while not len(topush) == 0:
+				heappush(heap, topush[0])
+				topush.pop(0)
+			#print("heap "+str(heap))
 		print("Something went wrong!")
 		return
 		#TODO
@@ -127,9 +126,9 @@ class gamelogic():
 		self.Moves.append("L")
 		for i in range(0, len(Input)):
 			for j in range(0,len(Input[i])):
-				if Input[i][j] == 'X':
+				if Input[i][j] == 0:
 					t = Input[i][j-1]
-					Input[i][j-1] = 'X'
+					Input[i][j-1] = 0
 					Input[i][j] = t
 					break
 		return Input
@@ -139,9 +138,9 @@ class gamelogic():
 		self.Moves.append("R")
 		for i in range(0, len(Input)):
 			for j in range(0,len(Input[i])-1):
-				if Input[i][j] == 'X':
+				if Input[i][j] == 0:
 					t = Input[i][j+1]
-					Input[i][j+1] = 'X'
+					Input[i][j+1] = 0
 					Input[i][j] = t
 					break
 		return Input
@@ -151,9 +150,9 @@ class gamelogic():
 		self.Moves.append("U")
 		for i in range(0, len(Input)):
 			for j in range(0,len(Input[i])):
-				if Input[i][j] == 'X':
+				if Input[i][j] == 0:
 					t = Input[i-1][j]
-					Input[i-1][j] = 'X'
+					Input[i-1][j] = 0
 					Input[i][j] = t
 					break
 		return Input
@@ -164,9 +163,9 @@ class gamelogic():
 		self.Moves.append("D")
 		for i in range(0, len(Input)-1):
 			for j in range(0,len(Input[i])):
-				if Input[i][j] == 'X':
+				if Input[i][j] == 0:
 					t = Input[i+1][j]
-					Input[i+1][j] = 'X'
+					Input[i+1][j] = 0
 					Input[i][j] = t
 					d = True
 					break

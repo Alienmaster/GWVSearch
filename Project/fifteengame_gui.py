@@ -10,7 +10,7 @@ class gameUI():
 	def __init__(self, state):
 
 		self.state = state
-		self.goalstate = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,'X']]
+		self.goalstate = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
 		self.buttons = []
 		self.master = Tk()
 		self.fifteenFrame = Frame(self.master)
@@ -60,7 +60,7 @@ class gameUI():
 		for i in range(0, len(state)):
 			for j in range(0, len(state[i])):
 				self.buttons[c]["text"]=str(state[i][j])
-				if state[i][j] == 'X':
+				if state[i][j] == 0:
 					self.buttons[c].grid_remove()
 				c += 1
 		self.listbox.delete(0, END)
@@ -75,7 +75,7 @@ class gameUI():
 		self.loadState(self.state)
 
 	def handleReset(self, event):
-		self.state = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,'X']]
+		self.state = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
 		self.l.resetMoves()
 		self.loadState(self.state)
 
@@ -95,25 +95,25 @@ class gameUI():
 			for j in range(0, len(self.state[i])):
 				if event.widget["text"] == str(self.state[i][j]):
 					if j + 1 <= (len(self.state[i]))-1: 
-						if self.state[i][j+1] == 'X':
+						if self.state[i][j+1] == 0:
 							self.state = self.l.moveLeft(self.state)
 							self.loadState(self.state)
 							return
 					if j - 1 >= 0:
-						if self.state[i][j-1] == 'X':
+						if self.state[i][j-1] == 0:
 							self.state = self.l.moveRight(self.state)
 							self.loadState(self.state)
 							return
 					if i + 1 <= len(self.state)-1:
-						if self.state[i+1][j] == 'X':
+						if self.state[i+1][j] == 0:
 							self.state = self.l.moveUp(self.state)
 							self.loadState(self.state)
 							return
 					if i - 1 >= 0:
-						if self.state[i-1][j] == 'X':
+						if self.state[i-1][j] == 0:
 							self.state = self.l.moveDown(self.state)
 							self.loadState(self.state)
 							return
 				c += 1
 
-g = gameUI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,'X']])
+g = gameUI([[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]])
