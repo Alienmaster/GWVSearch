@@ -3,6 +3,7 @@ import fifteengame
 import inspect
 from tkinter import *
 from tkinter import messagebox
+import time
 
 
 class gameUI():
@@ -66,9 +67,27 @@ class gameUI():
 		self.listbox.delete(0, END)
 		for i in self.l.returnMoves():
 			self.listbox.insert(END, i)
-		print(self.l.returnPossibleMoves(self.state))
 		if (self.state == self.goalstate) and (not (str(inspect.stack()[1][3]) == "__init__") and (not (str(inspect.stack()[1][3]) == "handleReset"))):
 			messagebox.showinfo("Done!", "The Puzzle has been solved!")
+
+	def fastLoadState(self, state):
+		c = 0
+		for widget in self.fifteenFrame.winfo_children():
+			widget.destroy()
+		self.fifteenFrame.update()
+		self.buttons = []
+		for x in range(0, len(state)):
+			for y in range(0, len(state[x])):
+				b = Button(self.fifteenFrame, text="", width=10, height=4)
+				b.grid(row=x, column=y)
+				b.bind('<Button-1>', self.handleGameMove)
+				self.buttons.append(b)
+		for i in range(0, len(state)):
+			for j in range(0, len(state[i])):
+				self.buttons[c]["text"]=str(state[i][j])
+				if state[i][j] == 0:
+					self.buttons[c].grid_remove()
+				c += 1
 
 	def handleClear(self, event):
 		self.l.resetMoves()
@@ -87,7 +106,12 @@ class gameUI():
 	def handleSolveButton(self,event):
 		node = self.l.astar(self.state)
 		print(node)
-		self.loadState(self.state)
+		print(len(node[2]))
+		print(len(node[3]))
+		self.l.setMoves(node[3])
+		for i in node[2]:
+			self.fastLoadState(i)
+			self.master.after(500, self.master.update())
 
 	def handleGameMove(self, event):
 		c = 0
