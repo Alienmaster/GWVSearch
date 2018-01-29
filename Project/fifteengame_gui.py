@@ -111,7 +111,7 @@ class gameUI():
 		self.l.setMoves(node[3])
 		for i in node[2]:
 			self.fastLoadState(i)
-			self.master.after(500, self.master.update())
+			self.master.after(200, self.master.update())
 
 	def handleGameMove(self, event):
 		c = 0
