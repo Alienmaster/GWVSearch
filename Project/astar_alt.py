@@ -15,7 +15,63 @@ from heapq import heappop, heappush
 
 
 class AStar:
+    def ida_search(self, heuristic, matrix, path, g, bound):
+        print("matrix: ",matrix, "\n",
+              "path: ", path, "\n",
+              "g: ", g, "\n",
+              "bound: ", bound)
+        heu = ph.PuzzleHeuristics()
+        move = nm.SearchMovements()
+        state = copy.deepcopy(matrix)
+        p = copy.deepcopy(path)
+        visited = []
+        visited.append(state)
+        print("hvalue: ", heu.calcHeuristic(heuristic, state))
+        f = g + heu.calcHeuristic(heuristic, state)
+        print("f: ", f)
+        if f > bound:
+            print("WTF")
+            return f
+        if move.isGoal(state):
+            return 'FOUND'
+        minimum = sys.maxsize
+        heap = []
+        adjCoords = move.getAdjacentCoordsEmpty(state)
+        print("adjCoords: ", adjCoords)
+        for a in adjCoords:
+            m = move.moveStepByCoord(a, copy.deepcopy(state))
+            print("new heu", heu.calcHeuristic(heuristic, m))
+            heappush(heap, (heu.calcHeuristic(heuristic, m), m, p + [(a)]))
+        while heap:
+            pop = heappop(heap)
+            print(pop[2])
+            if pop[1] not in visited:
+                t = self.ida_search(heuristic, pop[1], pop[2], g + len(pop[2]), bound)
+                print(t, minimum)
+                if t == 'FOUND':
+                    return 'FOUND'
+                if t < minimum:
+                    minimum = t
+        return minimum
     
+    def ida_star(self, heuristic, matrix):
+        state = copy.deepcopy(matrix)
+        heu = ph.PuzzleHeuristics()
+        t = []
+        path = []
+        bound = heu.calcHeuristic(heuristic, state)
+        maxbound = bound * 10
+        
+        while not t:
+            t = self.ida_search(heuristic, state, path, 0, bound)
+            print("DEBUG", t)
+            if t == 'FOUND':
+                return (path, bound)
+            if t > maxbound:
+                return 'NOT FOUND'
+            bound = t
+                
+        
     def __astar(self, heuristic, matrix):
         heu = ph.PuzzleHeuristics()
         move = nm.SearchMovements()
@@ -50,8 +106,8 @@ class AStar:
 
 testmatrix = [[5,3,11,4],
                 [9,1,8,10],
-                [6,2,0,12],
-                [7,15,13,14]]
+                [6,2,12,14],
+                [7,0,15,13]]
 testmatrix2 = [[10, 2, 0, 3],
          [1,4,7,11],
          [13,9,14,12],
@@ -70,3 +126,4 @@ a = AStar()
 t1 = time()
 print(a.search(testmatrix, 'LC'))
 print(time()-t1)
+#print(a.ida_star('MD', testmatrix))
